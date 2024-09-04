@@ -12,21 +12,22 @@ const shapes = [
 
 function FallingShapes({ onGameOver }) {
   const [fallingShapes, setFallingShapes] = useState([])
-const shapesRef=useRef([])
-useEffect(()=>{
-  shapesRef.current.forEach((shape)=>{
-    shape.addEventListener('collide', ()=>{
-      onGameOver()
+  const shapesRef = useRef([])
+
+  useEffect(() => {
+    shapesRef.current.forEach((shape) => {
+      shape.addEventListener('collide', () => {
+        onGameOver()
+      })
     })
-  })
-})
-  // Add a new shape randomly
+  }, [onGameOver])
+
   useFrame(() => {
     if (Math.random() > 0.95) {
       const shape = shapes[Math.floor(Math.random() * shapes.length)]
       setFallingShapes((prev) => [
         ...prev,
-        { ...shape, id: Math.random().toString() } // Give each shape a unique id
+        { ...shape, id: Math.random().toString() }
       ])
     }
   })
@@ -69,8 +70,9 @@ useEffect(()=>{
     </>
   )
 }
+export default FallingShapes
 
-// Define the falling shape components
+// Define the falling shape components with display names
 
 const FallingBox = React.forwardRef(({ size, mass, onCollide }, ref) => {
   const [boxRef] = useBox(() => ({
@@ -87,6 +89,7 @@ const FallingBox = React.forwardRef(({ size, mass, onCollide }, ref) => {
     </mesh>
   )
 })
+FallingBox.displayName = 'FallingBox'
 
 const FallingSphere = React.forwardRef(({ size, mass, onCollide }, ref) => {
   const [sphereRef] = useSphere(() => ({
@@ -103,6 +106,7 @@ const FallingSphere = React.forwardRef(({ size, mass, onCollide }, ref) => {
     </mesh>
   )
 })
+FallingSphere.displayName = 'FallingSphere'
 
 const FallingCylinder = React.forwardRef(({ size, mass, onCollide }, ref) => {
   const [cylinderRef] = useCylinder(() => ({
@@ -119,5 +123,4 @@ const FallingCylinder = React.forwardRef(({ size, mass, onCollide }, ref) => {
     </mesh>
   )
 })
-
-export default FallingShapes
+FallingCylinder.displayName = 'FallingCylinder'
